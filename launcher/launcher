@@ -1,0 +1,20 @@
+#! /bin/bash
+
+set -e
+
+GAMEDIR=lemmings-christmas-demo
+
+if [ ! -d $SNAP_USER_DATA/$GAMEDIR/demo ];
+then
+	echo "Game directory does not exist"
+	echo "Creating directory"
+	mkdir -p $SNAP_USER_DATA/$GAMEDIR
+	echo "Copying game to directory"
+	cd $SNAP_USER_DATA/$GAMEDIR
+	guiluurve download
+	wget https://archive.org/download/LemmingsChristmasDemoPsygnosis1991/Lemmings_Christmas_Demo_Psygnosis_1991.zip -t 5 --timeout 10 || guiluurve nodownload
+	unzip -d demo Lemmings_Christmas_Demo_Psygnosis_1991.zip || guiluurve nozip
+fi
+
+cd $SNAP_USER_DATA/$GAMEDIR
+dosbox demo/TGALEMMI.EXE -exit -machine tandy -scaler normal3x

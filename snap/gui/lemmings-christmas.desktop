@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Lemmings Christmas
+Exec=lemmings-christmas
+Comment=Lemmings Christmas demo, emulated in dosbox
+Type=Application
+Icon=${SNAP}/lemmings.png
+Categories=Game;
+StartupNotify=true

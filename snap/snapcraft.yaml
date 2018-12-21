@@ -1,0 +1,56 @@
+name: lemmings-christmas
+version: '0.1'
+summary: Lemmings Christmas shareware demo
+description: |
+  Lemmings Christmas demo by DMA design, with the dosbox emulator
+
+grade: stable
+confinement: strict
+parts:
+  sdlgui:
+    plugin: autotools
+    source-type: tar
+    source: https://www.libsdl.org/projects/GUIlib/src/GUIlib-1.2.1.tar.gz
+    configflags: [--prefix=/usr]
+    override-build: |
+      rm config.* configure
+      ./autogen.sh
+      snapcraftctl build
+    build-packages:
+      - gcc
+      - g++
+      - make
+      - libsdl1.2-dev
+  gui:
+    after: [sdlgui]
+    plugin: autotools
+    source: guisrc
+    configflags: [--prefix=/usr]
+    build-packages:
+      - gcc
+      - make
+      - libsdl1.2-dev
+  launch:
+    after: [ desktop-glib-only ]
+    plugin: dump
+    source: launcher
+    stage-packages:
+      - wget
+      - unzip
+      - libpng12-0
+      - libsdl1.2debian
+      - libgl1-mesa-glx
+      - libsdl-net1.2
+      - libsdl-sound1.2
+      - dosbox
+      - libglu1-mesa
+    prime:
+      - -share
+      - -usr/share/doc
+      - -usr/share/lintian
+      - -usr/share/man
+
+apps:
+  lemmings-christmas:
+    plugs: [unity7, pulseaudio, opengl, network, x11, joystick]
+    command: desktop-launch $SNAP/launcher
