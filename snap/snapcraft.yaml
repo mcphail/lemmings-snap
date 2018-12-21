@@ -7,29 +7,6 @@ description: |
 grade: stable
 confinement: strict
 parts:
-  sdlgui:
-    plugin: autotools
-    source-type: tar
-    source: https://www.libsdl.org/projects/GUIlib/src/GUIlib-1.2.1.tar.gz
-    configflags: [--prefix=/usr]
-    override-build: |
-      rm config.* configure
-      ./autogen.sh
-      snapcraftctl build
-    build-packages:
-      - gcc
-      - g++
-      - make
-      - libsdl1.2-dev
-  gui:
-    after: [sdlgui]
-    plugin: autotools
-    source: guisrc
-    configflags: [--prefix=/usr]
-    build-packages:
-      - gcc
-      - make
-      - libsdl1.2-dev
   launch:
     after: [ desktop-glib-only ]
     plugin: dump
@@ -44,11 +21,14 @@ parts:
       - libsdl-sound1.2
       - dosbox
       - libglu1-mesa
+      - yad
+      - perl-base
     prime:
       - -share
       - -usr/share/doc
       - -usr/share/lintian
       - -usr/share/man
+      - -usr/share/icons
 
 apps:
   lemmings-christmas:
