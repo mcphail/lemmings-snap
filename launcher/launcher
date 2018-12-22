@@ -4,8 +4,7 @@ set -e
 set -o pipefail
 
 fail () {
-	yad --error --title="$1" --text="$2" --center
-	return 1
+	yad --width=300 --title="$1" --text="$2" --text-align=center --button=gtk-ok:1 --center
 }
 
 GAMEDIR=lemmings-christmas-demo
@@ -20,9 +19,9 @@ then
 	wget https://archive.org/download/LemmingsChristmasDemoPsygnosis1991/Lemmings_Christmas_Demo_Psygnosis_1991.zip -t 5 --timeout 10 2>&1 | \
 	perl -p -e '$| = 1; s/^.* +([0-9]+%) +([0-9,.]+[GMKB]) +([0-9hms,.]+).*$/\1\n# Downloading... \2 (\3)/' | \
 	yad --progress --title="Downloading Lemmings" --width=400 --center --no-buttons --auto-close --auto-kill --on-top --no-escape \
-	|| fail "Network Error" "Could not access network to download game files.\nPlease check the network status."
+	|| fail "Network Error" "Could not access network to download game files.\n\nPlease check the network status."
 	unzip -d demo Lemmings_Christmas_Demo_Psygnosis_1991.zip \
-	|| fail "Error" "Could not extract game files.\nThe download may have been corrupted"
+	|| fail "Error" "Could not extract game files.\n\nThe download may have been corrupted"
 fi
 
 cd $SNAP_USER_DATA/$GAMEDIR
