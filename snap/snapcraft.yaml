@@ -32,5 +32,5 @@ parts:
 
 apps:
   lemmings-christmas:
-    plugs: [unity7, pulseaudio, opengl, network, x11, joystick]
+    plugs: [desktop, desktop-legacy, unity7, pulseaudio, opengl, network, x11, joystick]
     command: desktop-launch $SNAP/launcher
