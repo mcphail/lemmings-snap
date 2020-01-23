@@ -1,6 +1,7 @@
 name: lemmings-christmas
-version: '0.3'
+version: '0.4'
 summary: Lemmings Christmas shareware demo
+base: core18
 description: |
   Lemmings Christmas demo by DMA design, with the dosbox emulator
 
@@ -14,12 +15,9 @@ parts:
     stage-packages:
       - wget
       - unzip
-      - libpng12-0
-      - libsdl1.2debian
+      - libpng16-16
       - libgl1-mesa-glx
-      - libsdl-net1.2
-      - libsdl-sound1.2
-      - dosbox
+      - libslang2
       - libglu1-mesa
       - yad
       - perl-base
@@ -30,7 +28,32 @@ parts:
       - -usr/share/man
       - -usr/share/icons
 
+  dosbox-staging:
+    source: https://github.com/dreamer/dosbox-staging.git
+    plugin: autotools
+    build-packages:
+      - xvfb
+      - libtool
+      - build-essential
+      - libsdl2-dev
+      - libsdl2-net-dev
+      - libncurses-dev
+      - libopusfile-dev
+    stage-packages:
+      - libsdl2-2.0-0
+      - libsdl2-net-2.0-0
+      - libopusfile0
+  desktop-glib-only:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    plugin: make
+    build-packages:
+      - libglib2.0-dev
+    stage-packages:
+      - libglib2.0-bin
+
 apps:
   lemmings-christmas:
     plugs: [desktop, desktop-legacy, unity7, pulseaudio, opengl, network, x11, joystick]
     command: desktop-launch $SNAP/launcher
+    extensions: [gnome-3-28]
