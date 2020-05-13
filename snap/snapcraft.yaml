@@ -1,5 +1,5 @@
 name: lemmings-christmas
-version: '0.4'
+version: '0.5'
 summary: Lemmings Christmas shareware demo
 base: core18
 description: |
@@ -9,7 +9,6 @@ grade: stable
 confinement: strict
 parts:
   launch:
-    after: [ desktop-glib-only ]
     plugin: dump
     source: launcher
     stage-packages:
@@ -43,17 +42,22 @@ parts:
       - libsdl2-2.0-0
       - libsdl2-net-2.0-0
       - libopusfile0
-  desktop-glib-only:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: glib-only
-    plugin: make
-    build-packages:
-      - libglib2.0-dev
-    stage-packages:
-      - libglib2.0-bin
+
+  cleanup:
+    after: [launch, dosbox-staging]
+    plugin: nil
+    build-snaps:
+      - core18
+      - gtk-common-themes
+      - gnome-3-28-1804
+    override-prime: |
+      set -eux
+      for snap in "core18" "gtk-common-themes" "gnome-3-28-1804"; do
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -r "$SNAPCRAFT_PRIME/{}" \;
+      done
 
 apps:
   lemmings-christmas:
-    plugs: [desktop, desktop-legacy, unity7, pulseaudio, opengl, network, x11, joystick]
-    command: desktop-launch $SNAP/launcher
+    plugs: [desktop, desktop-legacy, unity7, audio-playback, opengl, network, x11, joystick]
+    command: launcher
     extensions: [gnome-3-28]
